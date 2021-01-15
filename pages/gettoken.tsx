@@ -83,7 +83,7 @@ export default function Home(props) {
           }
             
             ))}
-         //{ image: "test", price24: "test", Price: "test", Marketcap: "test" },
+     
         title="Demo" />
 
         
