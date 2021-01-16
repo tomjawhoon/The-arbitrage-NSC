@@ -24,15 +24,10 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/_error.js"
     ],
-    "/gettoken": [
+    "/testgetdata": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
-      "static/chunks/pages/gettoken.js"
-    ],
-    "/test": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/test.js"
+      "static/chunks/pages/testgetdata.js"
     ]
   },
   "ampFirstPages": []
