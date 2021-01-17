@@ -19,12 +19,12 @@ const cons = require('consolidate');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.post('/testgetdata', (req, res) => {
-    console.log("show ===> Value", req)
-    console.log("req.body.name =>", req.body.name)
-    console.log("req.body.number =>", req.body.number)
-    console.log("INPUT --->getprice ")
+   // console.log("show ===> Value", req)
+    //console.log("req.body.name =>", req.body.name)
+    // console.log("! !  ! !  ! ! ! ! ! ! ! !  valueinput =>", req.body.valueinput)
+    //console.log("INPUT --->getprice ")
 
-    const getMidPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, chainId, infuraKey) => {
+const getMidPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, chainId, infuraKey) => {
         if (chainId == undefined) {
             chainId = ChainId.MAINNET
         }
@@ -188,8 +188,9 @@ app.post('/testgetdata', (req, res) => {
         //const test = web3.utils.fromWei(inputAmount, 'Ether')
         // console.log("test =>",test)
 
-        const amount = req.body.number;
-        const test = JSON.stringify(amount);
+        const amount = req.body.valueinput;
+        console.log("amount amount amount ",amount)
+        const test = amount;
         console.log("show ==== amount ",test)
         //WETH <== DAI
         // data = await getMidPrice("0xd26114cd6ee289accf82350c8d8487fedb8a0c07", 18, "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18)
