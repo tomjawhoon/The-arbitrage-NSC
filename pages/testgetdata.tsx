@@ -2,7 +2,6 @@ import React, { ReactElement, useState } from 'react'
 import axios from 'axios';
 interface Props {
     initialId: any,
-    onSave: any,
     valueinput: any,
 }
 
@@ -17,7 +16,7 @@ const onSave = (valueinput) => { //arrow function
     });
 }
 
-export default function Testgetdata({ initialId, onSave }: Props): ReactElement {
+export default function Testgetdata({ initialId }: Props): ReactElement {
     const [newId, setNewId] = useState(initialId)
     console.log("newId", newId)
     return (
