@@ -59,7 +59,7 @@ router.route('/')
         res.render('PSULOGIN.html')
     })
     .post((req, res) => {
- 
+
     })
 
 
@@ -68,6 +68,7 @@ router.route('getprice')
          res.render('PSULOGIN.html')
      })*/
     .post((req, res) => {
+        console.log("INPUT --->getprice ")
         const getExecutionPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, tradeAmount, chainId, infuraKey) => {
             if (chainId == undefined) {
                 chainId = ChainId.MAINNET
@@ -99,7 +100,7 @@ router.route('getprice')
             //const test = web3.utils.fromWei(inputAmount, 'Ether')
             // console.log("test =>",test)
 
-           // const amount = "10";
+            // const amount = "10";
             const amount = req.amount;
             //WETH <== DAI
             // data = await getMidPrice("0xd26114cd6ee289accf82350c8d8487fedb8a0c07", 18, "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18)
