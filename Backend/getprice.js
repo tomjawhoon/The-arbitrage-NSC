@@ -1,7 +1,8 @@
 const { ChainId, Token, WETH, Fetcher, Route, Trade, TokenAmount, TradeType } = require('@uniswap/sdk')
 const { getNetwork } = require('@ethersproject/networks')
 const web3 = require('web3');
-const { getDefaultProvider, InfuraProvider } = require('@ethersproject/providers')
+const { getDefaultProvider, InfuraProvider } = require('@ethersproject/providers');
+const cons = require('consolidate');
 
 const getMidPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, chainId, infuraKey) => {
     if (chainId == undefined) {
@@ -168,6 +169,7 @@ const main = async () => {
     // console.log("test =>",test)
 
     const amount = "10" ;
+    console.log("a",amount)
     //WETH <== DAI
     // data = await getMidPrice("0xd26114cd6ee289accf82350c8d8487fedb8a0c07", 18, "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18)
     // console.log("SHOW", data)
