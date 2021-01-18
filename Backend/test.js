@@ -144,15 +144,15 @@ app.post('/swapcoin', (req, res) => {
         const value = trade.inputAmount.raw.toString()
         console.log(path);
         console.log(trade.inputAmount.raw.toString());
-        const res = await uniswapContract.methods.swapExactETHForTokens(
+        const transaction = await uniswapContract.methods.swapExactETHForTokens(
             amountOutMin,
             path,
             to,
             deadline,
             { from: walletInfo.address, privateKey: walletInfo.privateKey, value },
         )
-        console.log('res', res.transactionHash);
-        res.send(transactionHash)
+        console.log('show transaction', transaction.transactionHash);
+        res.send(transaction.transactionHash)
     }
     main();
 })

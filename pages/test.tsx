@@ -84,7 +84,7 @@ export default function Test(props, initialId: Props): ReactElement {
     const [newId, setNewId] = useState(initialId)
     const [Price, setPrice] = useState(0)
     const [Hash, setHash] = useState(0)
-    console.log("Price", Price)
+    //  console.log("Price", Price)
     function onSave(valueinput: any) {
         console.log("valueinput", valueinput);
         axios.post('http://localhost:5001/testgetdata', {
@@ -94,15 +94,15 @@ export default function Test(props, initialId: Props): ReactElement {
             setPrice(response.data)
             axios.post('http://localhost:5001/swapcoin', {
                 valueinput,
-            }).then(Hash => {
+            }).then(response => {
                 //console.log("Hash", Hash.data); //1000.000
-                setHash(Hash.data)
+                setHash(response.data)
             });
-
+            console.log("Hash", Hash) //1000.000
         });
     }
 
-    console.log("setPrice",Price) //1000.000
+    //console.log("setPrice",Price) //1000.000
     console.log("Hash",Hash) //1000.000
     const { data } = props.result;
     //console.log("Show---->getAPI---->", data)
@@ -136,14 +136,7 @@ export default function Test(props, initialId: Props): ReactElement {
                         </label>
                     </form>
                     <input type="text" name="name" placeholder="Enter coin" onChange={(e) => setNewId(e.target.value)} />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={classestest.button}
-                        onClick={() => onSave(newId)}
-                    >
-                        Exchang Token
-                        </Button>
+
                     <form>
                         <label>
                             Token:
@@ -152,13 +145,14 @@ export default function Test(props, initialId: Props): ReactElement {
                     </form>
                     <br></br>
                     <input type="text" name="name" placeholder="Enter coin" value={Price} />
-                    <input type="text"  placeholder="Hash" value={Hash} />
+                    <input type="text" name="name" placeholder="Enter coin" value={`https://kovan.etherscan.io/tx/`+Hash}  />
                     <Button
                         variant="contained"
                         color="primary"
                         className={classestest.button}
+                        onClick={() => onSave(newId)}
                     >
-                        SWAP TOKEN IN UNISWAP
+                        Exchang Token
                         </Button>
 
                 </Card>
