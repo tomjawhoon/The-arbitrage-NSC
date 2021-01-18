@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Header from '../components/layouts/header'
 import Layout from '../components/layouts/layout'
@@ -17,6 +17,8 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Icon from '@material-ui/core/Icon';
 import { Theme } from '@material-ui/core';
+import axios from 'axios';
+import { Hash } from 'crypto';
 const useStylesbuttom = makeStyles((theme: Theme) =>
     createStyles({
         button: {
@@ -63,6 +65,8 @@ const useStylesRight = makeStyles({
 
 interface Props {
     result: { data: any; };
+    initialId: any,
+    valueinput: any,
 
 }
 export async function getServerSideProps(context) {
@@ -76,28 +80,50 @@ export async function getServerSideProps(context) {
         },
     }
 }
-export default function Test(props: Props): ReactElement {
-    const { data } = props.result;
-    console.log("Show---->getAPI---->", data)
-    const formatPercent = number =>
-    `${new Number(number).toFixed(2)}%`
+export default function Test(props, initialId: Props): ReactElement {
+    const [newId, setNewId] = useState(initialId)
+    const [Price, setPrice] = useState(0)
+    const [Hash, setHash] = useState(0)
+    console.log("Price", Price)
+    function onSave(valueinput: any) {
+        console.log("valueinput", valueinput);
+        axios.post('http://localhost:5001/testgetdata', {
+            valueinput, //0.005 ค่าที่กรอกในช่องอ่านั้นแหละ
+        }).then(response => {
+            //console.log("response", response.data); //1000.000
+            setPrice(response.data)
+            axios.post('http://localhost:5001/swapcoin', {
+                valueinput,
+            }).then(Hash => {
+                //console.log("Hash", Hash.data); //1000.000
+                setHash(Hash.data)
+            });
 
-  const formatDollar = (number, maximumSignificantDigits) =>
-    new Intl.NumberFormat(
-      'en-US',
-      {
-        style: 'currency',
-        currency: 'USD',
-        maximumSignificantDigits
-      })
-      .format(number);
+        });
+    }
+
+    console.log("setPrice",Price) //1000.000
+    console.log("Hash",Hash) //1000.000
+    const { data } = props.result;
+    //console.log("Show---->getAPI---->", data)
+    const formatPercent = number =>
+        `${new Number(number).toFixed(2)}%`
+
+    const formatDollar = (number, maximumSignificantDigits) =>
+        new Intl.NumberFormat(
+            'en-US',
+            {
+                style: 'currency',
+                currency: 'USD',
+                maximumSignificantDigits
+            })
+            .format(number);
     const classestest = useStylesbuttom();
     const classes = useStyles();
     const classesRight = useStylesRight();
     return (
         <Layout>
-            <div className={classes.container} >
-
+            <div className={classes.container}>
                 <Card className={classes.root}>
                     <div className={classes.test}>
                         Balance:
@@ -106,32 +132,35 @@ export default function Test(props: Props): ReactElement {
 
                     <form>
                         <label>
-                            Token:
-                     <input type="text" name="name" />
+                            Token: <input type="text" name="name" value="WETH" />
                         </label>
-                        <input type="submit" value="Submit" />
                     </form>
-                    <br></br>
-                    <input type="text" name="name" placeholder="Enter coin" />
-                    <>___________________________________________________________________________________________________________</>
-                    <br></br>
-                    <form>
-                        <label>
-                            Token:
-                     <input type="text" name="name" />
-                        </label>
-                        <input type="submit" value="Submit" />
-                    </form>
-                    <br></br>
-                    <input type="text" name="name" placeholder="Enter coin" />
+                    <input type="text" name="name" placeholder="Enter coin" onChange={(e) => setNewId(e.target.value)} />
                     <Button
                         variant="contained"
                         color="primary"
                         className={classestest.button}
-                    //endIcon={<Icon>send</Icon>}
+                        onClick={() => onSave(newId)}
                     >
                         Exchang Token
                         </Button>
+                    <form>
+                        <label>
+                            Token:
+                     <input type="text" name="name" value="MKR" />
+                        </label>
+                    </form>
+                    <br></br>
+                    <input type="text" name="name" placeholder="Enter coin" value={Price} />
+                    <input type="text"  placeholder="Hash" value={Hash} />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        className={classestest.button}
+                    >
+                        SWAP TOKEN IN UNISWAP
+                        </Button>
+
                 </Card>
             </div>
 
@@ -146,7 +175,7 @@ export default function Test(props: Props): ReactElement {
                 data={
                     data.map((coin) => (
                         {
-                            image: <img src={coin.image} style={{ width: 25, height: 25, marginRight: 10 }}/>,
+                            image: <img src={coin.image} style={{ width: 25, height: 25, marginRight: 10 }} />,
                             name: coin.symbol.toUpperCase(),
                             price24: formatPercent(coin.price_change_percentage_24h),
                             current_price: coin.current_price,

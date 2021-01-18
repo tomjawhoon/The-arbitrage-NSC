@@ -28,11 +28,6 @@
       "static/chunks/main.js",
       "static/chunks/webpack.js",
       "static/chunks/pages/test.js"
-    ],
-    "/testgetdata": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/testgetdata.js"
     ]
   },
   "ampFirstPages": []

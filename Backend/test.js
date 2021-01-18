@@ -1,16 +1,15 @@
 const express = require('express')
 const app = express()
 const Web3 = require("web3");
-const { ChainId, Token, WETH, Fetcher, Route, Trade, TokenAmount, TradeType } = require('@uniswap/sdk')
+const { ChainId, Token, WETH, Fetcher, Route, Trade, TokenAmount, TradeType ,Percent} = require('@uniswap/sdk')
 const { getNetwork } = require('@ethersproject/networks')
 const { getDefaultProvider, InfuraProvider } = require('@ethersproject/providers')
-const infura =
-{
-    projectId: '37dd526435b74012b996e147cda1c261',
-    projectSecret: '55c6430534c042a1b762cd5f6e0f0a55',
-    endpoint: "wss://kovan.infura.io/ws/v3/37dd526435b74012b996e147cda1c261"
-}
+const config = require('./config');
+const Uniswap = require('./contracts/uniswap');
+const { infura, walletInfo } = config;
+const chainId = ChainId.KOVAN;
 const web3 = new Web3(infura.endpoint);
+const uniswapContract = Uniswap(web3);
 var cors = require('cors')
 app.use(cors()) // Use this after the variable declaration
 //var engines = require('consolidate');
@@ -19,45 +18,7 @@ const cons = require('consolidate');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.post('/testgetdata', (req, res) => {
-   // console.log("show ===> Value", req)
-    //console.log("req.body.name =>", req.body.name)
-    // console.log("! !  ! !  ! ! ! ! ! ! ! !  valueinput =>", req.body.valueinput)
-    //console.log("INPUT --->getprice ")
-
-const getMidPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, chainId, infuraKey) => {
-        if (chainId == undefined) {
-            chainId = ChainId.MAINNET
-        }
-        let network
-        if (infuraKey != undefined) {
-            network = new InfuraProvider(getNetwork(chainId), infuraKey)
-        } else {
-            network = getDefaultProvider(getNetwork(chainId))
-        }
-
-        let base = new Token(chainId, baseToken, baseDecimal),
-            quote = new Token(chainId, quoteToken, quoteDecimal),
-            pair = await Fetcher.fetchPairData(quote, base, network),
-            route = await new Route([pair], base),
-            base2quote = await route.midPrice.toSignificant(6),
-            quote2base = await route.midPrice.invert().toSignificant(6)
-        //console.log("route",route)
-        return {
-            base2quote: base2quote, //เหรียญ 1
-            quote2base: quote2base //เหรียญ 2
-        }
-
-    }
-
     const getExecutionPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, tradeAmount, chainId, infuraKey) => {
-        /*console.log("baseToken ===", baseToken)
-        console.log("baseDecimal ===", baseDecimal)
-        console.log("quoteToken ===", quoteToken)
-        console.log("quoteDecimal ===", quoteDecimal)
-        console.log("tradeAmount ===", tradeAmount)
-        console.log("chainId ===", chainId)
-        console.log("infuraKey ===", infuraKey)*/
-
         if (chainId == undefined) {
             chainId = ChainId.MAINNET
         }
@@ -74,108 +35,9 @@ const getMidPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, cha
             base2quote = await route.midPrice.toSignificant(6),
             quote2base = await route.midPrice.invert().toSignificant(6),
             trade = new Trade(route, new TokenAmount(base, tradeAmount), TradeType.EXACT_INPUT)
-
         return trade.executionPrice.toSignificant(6)
-
     }
-    const getMidPriceViaETH = async (baseToken, baseDecimal, quoteToken, quoteDecimal, chainId, infuraKey) => {
-        if (chainId == undefined) {
-            chainId = ChainId.MAINNET
-        }
-        let network
-        if (infuraKey != undefined) {
-            network = new InfuraProvider(getNetwork(chainId), infuraKey)
-        } else {
-            network = getDefaultProvider(getNetwork(chainId))
-        }
-
-        let base = new Token(chainId, baseToken, baseDecimal),
-            quote = new Token(chainId, quoteToken, quoteDecimal),
-            quoteWETH = await Fetcher.fetchPairData(quote, WETH[chainId], network),
-            WETHbase = await Fetcher.fetchPairData(WETH[chainId], base, network),
-            route = await new Route([WETHbase, quoteWETH], base),
-            base2quote = await route.midPrice.toSignificant(6),
-            quote2base = await route.midPrice.invert().toSignificant(6)
-
-        return {
-            base2quote: base2quote, //เหรียญ 1
-            quote2base: quote2base  //เหรียญ 2
-        }
-
-    }
-    const getExecutionPriceViaETH = async (baseToken, baseDecimal, quoteToken, quoteDecimal, tradeAmount, chainId, infuraKey) => {
-        console.log("teaddd =>", tradeAmount)
-        if (chainId == undefined) {
-            chainId = ChainId.MAINNET
-        }
-        let network
-        if (infuraKey != undefined) {
-            network = new InfuraProvider(getNetwork(chainId), infuraKey)
-        } else {
-            network = getDefaultProvider(getNetwork(chainId))
-        }
-        let base = new Token(chainId, baseToken, baseDecimal),
-            quote = new Token(chainId, quoteToken, quoteDecimal),
-            quoteWETH = await Fetcher.fetchPairData(quote, WETH[chainId], network),
-            WETHbase = await Fetcher.fetchPairData(WETH[chainId], base, network),
-            route = await new Route([WETHbase, quoteWETH], base),
-            base2quote = await route.midPrice.toSignificant(6),
-            quote2base = await route.midPrice.invert().toSignificant(6),
-            trade = new Trade(route, new TokenAmount(base, tradeAmount), TradeType.EXACT_INPUT)
-        //console.log("trade =>", trade.executionPrice)
-        return trade.executionPrice.toSignificant(6) //ค่ากลางข้อง ทั้ง 2 เหรียญ
-    }
-
-    const getMidPriceViaExactToken = async (baseToken, baseDecimal, quoteToken, quoteDecimal, midToken, midDecimal, chainId, infuraKey) => {
-        if (chainId == undefined) {
-            chainId = ChainId.MAINNET
-        }
-        let network
-        if (infuraKey != undefined) {
-            network = new InfuraProvider(getNetwork(chainId), infuraKey)
-        } else {
-            network = getDefaultProvider(getNetwork(chainId))
-        }
-        let base = new Token(chainId, baseToken, baseDecimal),
-            quote = new Token(chainId, quoteToken, quoteDecimal),
-            mid = new Token(chainId, midToken, midDecimal)
-        quoteMid = await Fetcher.fetchPairData(quote, mid, network),
-            midBase = await Fetcher.fetchPairData(mid, base, network),
-            route = await new Route([midBase, quoteMid], base),
-            base2quote = await route.midPrice.toSignificant(6),
-            quote2base = await route.midPrice.invert().toSignificant(6)
-
-        return {
-            base2quote: base2quote, //เหรียญ 1
-            quote2base: quote2base  //เหรียญ 2
-        }
-
-    }
-    const getExecutionPriceViaExactToken = async (baseToken, baseDecimal, quoteToken, quoteDecimal, midToken, midDecimal, tradeAmount, chainId, infuraKey) => {
-        if (chainId == undefined) {
-            chainId = ChainId.MAINNET
-        }
-        let network
-        if (infuraKey != undefined) {
-            network = new InfuraProvider(getNetwork(chainId), infuraKey)
-        } else {
-            network = getDefaultProvider(getNetwork(chainId))
-        }
-        let base = new Token(chainId, baseToken, baseDecimal),
-            quote = new Token(chainId, quoteToken, quoteDecimal),
-            mid = new Token(chainId, midToken, midDecimal)
-        quoteMid = await Fetcher.fetchPairData(quote, mid, network),
-            midBase = await Fetcher.fetchPairData(mid, base, network),
-            route = await new Route([midBase, quoteMid], base),
-            base2quote = await route.midPrice.toSignificant(6),
-            quote2base = await route.midPrice.invert().toSignificant(6),
-            trade = new Trade(route, new TokenAmount(base, tradeAmount), TradeType.EXACT_INPUT)
-
-        return trade.executionPrice.toSignificant(6)
-
-    }
-
-
+ 
     const main = async () => {
         //const WETH =  0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
         //const DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
@@ -189,9 +51,9 @@ const getMidPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, cha
         // console.log("test =>",test)
 
         const amount = req.body.valueinput;
-        console.log("amount amount amount ",amount)
+        console.log("amount amount amount ", amount)
         const test = amount;
-        console.log("show ==== amount ",test)
+        console.log("show ==== amount ", test)
         //WETH <== DAI
         // data = await getMidPrice("0xd26114cd6ee289accf82350c8d8487fedb8a0c07", 18, "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18)
         // console.log("SHOW", data)
@@ -210,17 +72,94 @@ const getMidPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, cha
     }
     main()
     module.exports = {
-        getMidPrice: getMidPrice,
         getExecutionPrice: getExecutionPrice,
-        getMidPriceViaETH: getMidPriceViaETH,
-        getExecutionPriceViaETH: getExecutionPriceViaETH,
-        getMidPriceViaExactToken: getMidPriceViaExactToken,
-        getExecutionPriceViaExactToken: getExecutionPriceViaExactToken,
     }
 
 
 
 })
+
+app.post('/swapcoin', (req, res) => {
+    console.log("INPUT swapcoin ")
+    console.log("req.body.valueswap",req.body.valueinput)
+    const tokens = {
+        dai: {
+            address: '0xC4375B7De8af5a38a93548eb8453a498222C4fF2',
+            decimals: 18
+        },
+        usdc: {
+            address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+            decimals: 6
+        },
+        lcn: {
+            address: '0x0b3df94f9a997981c5ad52b0a16a26f6bb6039ed',
+            decimals: 10
+        },
+        mkr: {
+            address: '0xaaf64bfcc32d0f15873a02163e7e500671a4ffcd',
+            decimals: 18
+        },
+
+        knc: {
+            address: '0xad67cB4d63C9da94AcA37fDF2761AaDF780ff4a2',
+            decimals: 18
+        },
+
+        omg: {
+            address: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07',
+            decimals: 18
+        }
+
+
+
+    }
+
+    const DAI = new Token(chainId, tokens.dai.address, tokens.dai.decimals);
+    const USDC = new Token(chainId, tokens.usdc.address, tokens.usdc.decimals);
+    const LCN = new Token(chainId, tokens.lcn.address, tokens.lcn.decimals);
+    const MKR = new Token(chainId, tokens.mkr.address, tokens.mkr.decimals);
+    const KNC = new Token(chainId, tokens.knc.address, tokens.knc.decimals);
+    const OMG = new Token(chainId, tokens.omg.address, tokens.omg.decimals);
+
+
+    const main = async () => {
+        // const USDCWETHPair = await Fetcher.fetchPairData(USDC, WETH[ChainId.MAINNET])
+        // const DAIUSDCPair = await Fetcher.fetchPairData(DAI, USDC)
+        // const WETHDAIPair = await Fetcher.fetchPairData(DAI, WETH[chainId]);
+        // const route = new Route([DAIUSDCPair], DAI);
+        // const trade = new Trade(route, new TokenAmount(DAI, '1000000000000000000'), TradeType.EXACT_INPUT)
+        const MKRWETHPair = await Fetcher.fetchPairData(MKR, WETH[chainId]);
+        const route = new Route([MKRWETHPair], WETH[chainId]);
+        const numbercoin = req.body.valueinput;
+        const amount = numbercoin;
+        console.log("amountamountamountamountamountamountamountamountamountamountamount",amount)
+        const amountIn = web3.utils.toWei(amount, 'ether')
+        const trade = new Trade(route, new TokenAmount(WETH[chainId], amountIn), TradeType.EXACT_INPUT)
+        console.log(`Trade ${amount} ETH to ` + trade.executionPrice.toSignificant(6) + ` MKR`);
+        const slippageTolerance = new Percent('100') // 50 bips, or 0.50%
+        const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw.toString()
+        const path = [WETH[MKR.chainId].address, MKR.address]
+        const to = walletInfo.address
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 20
+        const value = trade.inputAmount.raw.toString()
+        console.log(path);
+        console.log(trade.inputAmount.raw.toString());
+        const res = await uniswapContract.methods.swapExactETHForTokens(
+            amountOutMin,
+            path,
+            to,
+            deadline,
+            { from: walletInfo.address, privateKey: walletInfo.privateKey, value },
+        )
+        console.log('res', res.transactionHash);
+        res.send(transactionHash)
+    }
+    main();
+})
+
+
+
+
 
 app.listen(5001, () => {
     console.log('Start server at port 5001.')

@@ -22,6 +22,8 @@ export default function Testgetdata({ initialId }: Props): ReactElement {
             settest(response.data)
         });
     }
+
+
     console.log("newtest", newtest)
     console.log("newId", newId)
     return (
@@ -29,8 +31,8 @@ export default function Testgetdata({ initialId }: Props): ReactElement {
             <li>
                 <input type="text" placeholder="Enter new ID" onChange={(e) => setNewId(e.target.value)} />
                 <button onClick={() => onSave(newId)}>Save</button>
-                <input type="text" placeholder="show value" value= {newtest}  /> 
-              
+                <input type="text" placeholder="Enter new ID" value={newtest} />
+
             </li>
         </div>
     )
