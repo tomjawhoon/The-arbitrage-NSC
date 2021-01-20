@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const Web3 = require("web3");
-const { ChainId, Token, WETH, Fetcher, Route, Trade, TokenAmount, TradeType ,Percent} = require('@uniswap/sdk')
+const { ChainId, Token, WETH, Fetcher, Route, Trade, TokenAmount, TradeType, Percent } = require('@uniswap/sdk')
 const { getNetwork } = require('@ethersproject/networks')
 const { getDefaultProvider, InfuraProvider } = require('@ethersproject/providers')
 const config = require('./config');
@@ -10,13 +10,40 @@ const { infura, walletInfo } = config;
 const chainId = ChainId.KOVAN;
 const web3 = new Web3(infura.endpoint);
 const uniswapContract = Uniswap(web3);
+const MetaAuth = require("meta-auth");
 var cors = require('cors')
 app.use(cors()) // Use this after the variable declaration
 //var engines = require('consolidate');
 const bodyParser = require('body-parser');
 const cons = require('consolidate');
+const metaAuth = new MetaAuth({
+    banner: "Example Site Banner"
+});
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+app.get("/auth/:MetaAddress", metaAuth, (req, res) => {
+    console.log("show MetaAddress ", req.metaAuth)
+    console.log("show MetaAddress ", req)
+    // Request a message from the server
+    if (req.metaAuth && req.metaAuth.challenge) {
+        console.log("INPUT 2 2 2 2")
+        res.send(req.metaAuth.challenge);
+      
+    }
+});
+
+app.get("/auth/:MetaMessage/:MetaSignature", metaAuth, (req, res) => {
+   // console.log("show MetaAddress ", req)
+    if (req.metaAuth && req.metaAuth.recovered) {
+        // Signature matches the cache address/challenge
+        // Authentication is valid, assign JWT, etc.
+        res.send(req.metaAuth.recovered);
+    } else {
+        // Sig did not match, invalid authentication
+        res.status(400).send();
+    }
+});
 app.post('/testgetdata', (req, res) => {
     const getExecutionPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, tradeAmount, chainId, infuraKey) => {
         if (chainId == undefined) {
@@ -37,7 +64,7 @@ app.post('/testgetdata', (req, res) => {
             trade = new Trade(route, new TokenAmount(base, tradeAmount), TradeType.EXACT_INPUT)
         return trade.executionPrice.toSignificant(6)
     }
- 
+
     const main = async () => {
         //const WETH =  0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
         //const DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
@@ -81,7 +108,7 @@ app.post('/testgetdata', (req, res) => {
 
 app.post('/swapcoin', (req, res) => {
     console.log("INPUT swapcoin ")
-    console.log("req.body.valueswap",req.body.valueinput)
+    console.log("req.body.valueswap", req.body.valueinput)
     const tokens = {
         dai: {
             address: '0xC4375B7De8af5a38a93548eb8453a498222C4fF2',
@@ -132,7 +159,7 @@ app.post('/swapcoin', (req, res) => {
         const route = new Route([MKRWETHPair], WETH[chainId]);
         const numbercoin = req.body.valueinput;
         const amount = numbercoin;
-        console.log("amountamountamountamountamountamountamountamountamountamountamount",amount)
+        console.log("amountamountamountamountamountamountamountamountamountamountamount", amount)
         const amountIn = web3.utils.toWei(amount, 'ether')
         const trade = new Trade(route, new TokenAmount(WETH[chainId], amountIn), TradeType.EXACT_INPUT)
         console.log(`Trade ${amount} ETH to ` + trade.executionPrice.toSignificant(6) + ` MKR`);
