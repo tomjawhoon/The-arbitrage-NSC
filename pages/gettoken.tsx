@@ -63,36 +63,29 @@ export default function Home(props) {
       </table>
       <MaterialTable
         columns={[
-          {title: "Symbol", field: 'image' },
-          {title: "Name", field: 'name' },
-          {title: "24H Change", field: 'price24' },
-          {title: "Price", field: 'current_price' },
-          {title: "Market cap", field: 'market_cap' },
+          { title: "Symbol", field: 'image' },
+          { title: "Name", field: 'name' },
+          { title: "24H Change", field: 'price24' },
+          { title: "Price", field: 'current_price' },
+          { title: "Market cap", field: 'market_cap' },
         ]}
         data={
-          data.map((coin)=> (
+          data.map((coin) => (
             {
-            image: <img
-            src={coin.image}
-            style={{ width: 25, height: 25, marginRight: 10 }}
-          />,
-            name:coin.symbol,
-            price24:coin.price_change_percentage_24h,
-            current_price:coin.current_price,
-            market_cap:coin.market_cap,
-          }
-            
-            ))}
-     
+              image: <img
+                src={coin.image}
+                style={{ width: 25, height: 25, marginRight: 10 }}
+              />,
+              name: coin.symbol,
+              price24: coin.price_change_percentage_24h,
+              current_price: coin.current_price,
+              market_cap: coin.market_cap,
+            }
+          ))}
         title="Demo" />
-
-        
-
     </div>
   )
-
 }
-
 export async function getServerSideProps(context) {
   const params = {
     order: CoinGecko.ORDER.MARKET_CAP_DESC

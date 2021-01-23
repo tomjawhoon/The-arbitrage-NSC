@@ -5,7 +5,6 @@ import React from "react";
 export default class CMDoc extends Document {
     render() {
         return (
-
             <html>
                 <Head>
                     <meta charSet="utf-8" />
@@ -20,7 +19,6 @@ export default class CMDoc extends Document {
                     <Main />
                     <NextScript />
                 </body>
-
             </html>
         );
     }

@@ -711,10 +711,6 @@
       "file": "static/chunks/1.js"
     },
     {
-      "id": "./node_modules/core-js-pure/internals/engine-is-webos-webkit.js",
-      "file": "static/chunks/1.js"
-    },
-    {
       "id": "./node_modules/core-js-pure/internals/engine-user-agent.js",
       "file": "static/chunks/1.js"
     },
@@ -1483,15 +1479,7 @@
       "file": "static/chunks/1.js"
     },
     {
-      "id": "./node_modules/process/browser.js",
-      "file": "static/chunks/1.js"
-    },
-    {
       "id": "./node_modules/raf/index.js",
-      "file": "static/chunks/1.js"
-    },
-    {
-      "id": "./node_modules/regenerator-runtime/runtime.js",
       "file": "static/chunks/1.js"
     },
     {
