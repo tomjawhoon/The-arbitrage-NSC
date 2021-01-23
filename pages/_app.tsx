@@ -3,6 +3,9 @@ import App from "next/app";
 import Head from "next/head";
 import type { AppProps /*, AppContext */ } from 'next/app'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import Header from '../components/Header';
+
+
 
 interface Props {
 
@@ -41,6 +44,7 @@ function CMApp({ Component, pageProps }: AppProps) {
             </Head>
             <GlobalStyle />
             <ThemeProvider theme={theme}>
+                <Header />
                 <Component {...pageProps} />
             </ThemeProvider>
 
