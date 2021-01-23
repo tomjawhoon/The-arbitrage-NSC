@@ -24,15 +24,25 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/_error.js"
     ],
-    "/gettoken": [
+    "/about": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
-      "static/chunks/pages/gettoken.js"
+      "static/chunks/pages/about.js"
     ],
-    "/totalgetcoin": [
+    "/home/main": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
-      "static/chunks/pages/totalgetcoin.js"
+      "static/chunks/pages/home/main.js"
+    ],
+    "/terms": [
+      "static/chunks/main.js",
+      "static/chunks/webpack.js",
+      "static/chunks/pages/terms.js"
+    ],
+    "/wallet": [
+      "static/chunks/main.js",
+      "static/chunks/webpack.js",
+      "static/chunks/pages/wallet.js"
     ]
   },
   "ampFirstPages": []
