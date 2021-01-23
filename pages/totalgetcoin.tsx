@@ -19,7 +19,7 @@ export default function Totalgetcoin(props, initialId: Props): ReactElement {
     const DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
     const OMG = "0xd26114cd6ee289accf82350c8d8487fedb8a0c07";
     const MKR = "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2";
-    const USDT = "0x8dd5fbce2f6a956c3022ba3663759011dd51e73e";
+    //const USDT = "0x8dd5fbce2f6a956c3022ba3663759011dd51e73e";
     console.log("newId", newId)
     async function onSave(valueinput: any) {
         for (; ;) {
@@ -122,9 +122,6 @@ export default function Totalgetcoin(props, initialId: Props): ReactElement {
                 ]}
                 data={[
                     { START: 1, Price: Price, Price1: Price1, Price2: Price2 },
-
-
-
                 ]}
                 title="Demo" />
 
