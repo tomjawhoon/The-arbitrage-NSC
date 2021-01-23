@@ -168,15 +168,15 @@ const main = async () => {
     //const test = web3.utils.fromWei(inputAmount, 'Ether')
     // console.log("test =>",test)
 
-    const amount = "10" ;
-    console.log("a",amount)
+    const amount = "10";
+    console.log("a", amount)
     //WETH <== DAI
     // data = await getMidPrice("0xd26114cd6ee289accf82350c8d8487fedb8a0c07", 18, "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18)
     // console.log("SHOW", data)
     //WETH <== DAI
     data = await getExecutionPrice("0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18, "0x8dd5fbce2f6a956c3022ba3663759011dd51e73e", 18, web3.utils.toWei(amount, 'ETHER'))
     console.log("1 DAI = 1 WETH-->", data)
-    console.log(`1 DAI = 1 WETH * ${amount}-->`, data*amount)
+    console.log(`1 DAI = 1 WETH * ${amount}-->`, data * amount)
     //OMG <== DAI
     // data = await getMidPriceViaETH("0xd26114cd6ee289accf82350c8d8487fedb8a0c07", 18, "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18)
     // console.log("SHOW", data)
