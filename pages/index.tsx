@@ -19,7 +19,7 @@ export default function index({ }: Props): ReactElement {
 
 // Called in server-side
 index.getInitialProps = ({ res, err }) => { //destructoring
-  res.writeHead(301, { Location: "/login" })
+  res.writeHead(301, { Location: "/Home/main" })
   res.end();
   return {};
 };

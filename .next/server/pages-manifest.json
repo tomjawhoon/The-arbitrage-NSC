@@ -2,6 +2,6 @@
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
-  "/gettoken": "pages/gettoken.js",
-  "/totalgetcoin": "pages/totalgetcoin.js"
+  "/login": "pages/login.js",
+  "/Home/main": "pages/Home/main.js"
 }
