@@ -1,7 +1,9 @@
+import { Container } from "./styled";
+
 const Header_Home = () => {
     return (
         <>
-            <div> Header </div>
+            <Container> Header </Container>
         </>
     )
 }
