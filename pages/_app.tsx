@@ -4,8 +4,9 @@ import Head from "next/head";
 import type { AppProps /*, AppContext */ } from 'next/app'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import Header from '../components/Header';
-
-
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+config.autoAddCss = false;
 
 interface Props {
 
