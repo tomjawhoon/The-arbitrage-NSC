@@ -5,7 +5,7 @@ class App extends Component {
 
   async componentDidMount() {
     const web3 = await getWeb3();
-    const accounts = "0x6c25FE295Ecee6F0D8D34fC28dca2de68538fA4a";
+    const accounts = await web3.eth.getAccounts();
     console.log("show accout new new ", accounts)
     this.setState({ web3, accounts });
   }

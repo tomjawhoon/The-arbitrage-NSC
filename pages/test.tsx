@@ -103,7 +103,7 @@ export default function Test(props, initialId: Props): ReactElement {
     }
 
     //console.log("setPrice",Price) //1000.000
-    console.log("Hash",Hash) //1000.000
+    console.log("Hash", Hash) //1000.000
     const { data } = props.result;
     //console.log("Show---->getAPI---->", data)
     const formatPercent = number =>
@@ -145,7 +145,7 @@ export default function Test(props, initialId: Props): ReactElement {
                     </form>
                     <br></br>
                     <input type="text" name="name" placeholder="Enter coin" value={Price} />
-                    <input type="text" name="name" placeholder="Enter coin" value={`https://kovan.etherscan.io/tx/`+Hash}  />
+                    <input type="text" name="name" placeholder="Enter coin" value={`https://kovan.etherscan.io/tx/` + Hash} />
                     <Button
                         variant="contained"
                         color="primary"
