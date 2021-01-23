@@ -4,6 +4,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import MaterialTable from 'material-table'
 import { Button } from '@material-ui/core';
 import axios from 'axios';
+
 interface Props {
     result: { data: any; };
     initialId: any,
@@ -20,31 +21,66 @@ export default function Totalgetcoin(props, initialId: Props): ReactElement {
     const MKR = "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2";
     const USDT = "0x8dd5fbce2f6a956c3022ba3663759011dd51e73e";
     console.log("newId", newId)
-    // const [Price, setPrice] = useState(0)
-    // const [Hash, setHash] = useState(0)
     async function onSave(valueinput: any) {
-        console.log("valueinput", valueinput);
-        const response = await axios.post('http://localhost:5001/totalcoin', { //ETH
-            valueinput, //0.005 ค่าที่กรอกในช่องอ่านั้นแหละ
-            fromtoken: WETH, //WETH -MKR
-            totoken: MKR,
-        })
-        setPrice(response.data)
-        console.log("from node ", response.data)
-        const response2 = await axios.post('http://localhost:5001/totalcoin', {
-            // valueinput: valueinput,
-            valueinput: response.data.toString(),
-            fromtoken: MKR, //WETH -MKR
-            totoken: USDT,
-        })
-        setPrice1(response2.data)
-        const response3 = await axios.post('http://localhost:5001/totalcoin', {
-            // valueinput: valueinput,
-            valueinput: response2.data.toString(),
-            fromtoken: USDT, //WETH -MKR
-            totoken: WETH,
-        })
-        setPrice2(response3.data)
+        for (; ;) {
+            console.log("valueinput", valueinput);
+            const response = await axios.post('http://localhost:5001/totalcoin', { //ETH
+                valueinput, //0.005 ค่าที่กรอกในช่องอ่านั้นแหละ
+                fromtoken: WETH, //WETH -MKR
+                totoken: MKR,
+            })
+            setPrice(response.data)
+            console.log("FROM NODE = MKR = ", response.data);
+            // console.log("from node ", response.data)
+            const response2 = await axios.post('http://localhost:5001/totalcoin', {
+                // valueinput: valueinput,
+                valueinput: response.data.toString(),
+                fromtoken: MKR, //WETH -MKR
+                totoken: DAI,
+            })
+            setPrice1(response2.data)
+            console.log("FROM NODE = DAI = ", response2.data);
+            const response3 = await axios.post('http://localhost:5001/totalcoin', {
+                // valueinput: valueinput,
+                valueinput: response2.data.toString(),
+                fromtoken: DAI, //WETH -MKR
+                totoken: WETH,
+            })
+            setPrice2(response3.data)
+            console.log("FROM NODE = WETH = ", response3.data);
+        }
+
+        /* for (; ;) {
+             {
+                 console.log("valueinput", valueinput);
+                 const response = await axios.post('http://localhost:5001/totalcoin', { //ETH
+                     valueinput, //0.005 ค่าที่กรอกในช่องอ่านั้นแหละ
+                     fromtoken: WETH, //WETH -MKR
+                     totoken: MKR,
+                 })
+                 setPrice(response.data)
+                 console.log("FROM NODE = MKR = ", response.data);
+                 // console.log("from node ", response.data)
+                 const response2 = await axios.post('http://localhost:5001/totalcoin', {
+                     // valueinput: valueinput,
+                     valueinput: response.data.toString(),
+                     fromtoken: MKR, //WETH -MKR
+                     totoken: DAI,
+                 })
+                 setPrice1(response2.data)
+                 console.log("FROM NODE = DAI = ", response2.data);
+                 const response3 = await axios.post('http://localhost:5001/totalcoin', {
+                     // valueinput: valueinput,
+                     valueinput: response2.data.toString(),
+                     fromtoken: DAI, //WETH -MKR
+                     totoken: WETH,
+                 })
+                 setPrice2(response3.data)
+                 console.log("FROM NODE = WETH = ", response3.data);
+             }
+         }*/
+
+
         //     const response4 = await axios.post('http://localhost:5001/totalcoin', {
         //         // valueinput: valueinput,
         //         valueinput: response3.data,
@@ -61,16 +97,14 @@ export default function Totalgetcoin(props, initialId: Props): ReactElement {
                     MKR:<input type="text" name="name" placeholder="Enter coin" value={Price} />
                 </label>
                 <label>
-                    USDT:<input type="text" name="name" />
+                    DAI:<input type="text" name="name" value={Price1} />
                 </label>
                 <label>
-                    ETH:<input type="text" name="name" />
-                </label>
-                <label>
-                    ETH:<input type="text" name="name" />
+                    ETH:<input type="text" name="name" value={Price2} />
                 </label>
             </form>
             <br></br>
+
             <Button
                 variant="contained"
                 color="primary"
@@ -78,6 +112,22 @@ export default function Totalgetcoin(props, initialId: Props): ReactElement {
             >
                 Exchang Token
                         </Button>
+            <MaterialTable
+                columns={[
+                    { title: "ETH", field: "START" },
+                    { title: "MKR", field: 'Price' },
+                    { title: "DAI", field: 'Price1' },
+                    { title: "ETH", field: 'Price2' },
+
+                ]}
+                data={[
+                    { START: 1, Price: Price, Price1: Price1, Price2: Price2 },
+
+
+
+                ]}
+                title="Demo" />
+
         </>
     )
 }
