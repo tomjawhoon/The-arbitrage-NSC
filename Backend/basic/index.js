@@ -34,6 +34,6 @@ app.get('/auth/:MetaMessage/:MetaSignature', metaAuth, (req, res) => {
   };
 });
 
-app.listen(3001, () => {
-  console.log('Listening on port 3001')
+app.listen(5001, () => {
+  console.log('Listening on port 5001')
 })

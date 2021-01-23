@@ -22,6 +22,54 @@ const metaAuth = new MetaAuth({
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+app.post('/totalcoin', (req, res) => {
+    const getExecutionPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, tradeAmount, chainId, infuraKey) => {
+        if (chainId == undefined) {
+            chainId = ChainId.MAINNET
+        }
+        let network
+        if (infuraKey != undefined) {
+            network = new InfuraProvider(getNetwork(chainId), infuraKey)
+        } else {
+            network = getDefaultProvider(getNetwork(chainId))
+        }
+        let base = new Token(chainId, baseToken, baseDecimal),
+            quote = new Token(chainId, quoteToken, quoteDecimal),
+            pair = await Fetcher.fetchPairData(quote, base, network),
+            route = await new Route([pair], base),
+            base2quote = await route.midPrice.toSignificant(6),
+            quote2base = await route.midPrice.invert().toSignificant(6),
+            trade = new Trade(route, new TokenAmount(base, tradeAmount), TradeType.EXACT_INPUT)
+        return trade.executionPrice.toSignificant(6)
+    }
+
+    const main = async () => {
+        //const WETH =  0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+        //const DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
+        //const OMG = 0xd26114cd6ee289accf82350c8d8487fedb8a0c07
+        //const MKR = 0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2
+        //const USDT = 0x8dd5fbce2f6a956c3022ba3663759011dd51e73e
+        let data
+        const amount = req.body.valueinput;
+        console.log("amount amount amount ", amount)
+        const test = amount;
+        console.log("show ==== amount ", test)
+        //WETH <== DAI
+        // data = await getMidPrice("0xd26114cd6ee289accf82350c8d8487fedb8a0c07", 18, "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18)
+        // console.log("SHOW", data)
+        //WETH <== DAI
+        data = await getExecutionPrice(req.body.fromtoken, 18,req.body.totoken, 18, web3.utils.toWei(test, 'ETHER'))
+        console.log("1 DAI = 1 WETH-->", data)
+        console.log(`1 DAI = 1 WETH * ${test}-->`, data * test)
+        const result = JSON.stringify(data * test);
+        res.send(result)
+    }
+    main()
+    module.exports = {
+        getExecutionPrice: getExecutionPrice,
+    }
+})
+
 app.get("/auth/:MetaAddress", metaAuth, (req, res) => {
     console.log("show MetaAddress ", req.metaAuth)
     console.log("show MetaAddress ", req)
@@ -29,12 +77,12 @@ app.get("/auth/:MetaAddress", metaAuth, (req, res) => {
     if (req.metaAuth && req.metaAuth.challenge) {
         console.log("INPUT 2 2 2 2")
         res.send(req.metaAuth.challenge);
-      
+
     }
 });
 
 app.get("/auth/:MetaMessage/:MetaSignature", metaAuth, (req, res) => {
-   // console.log("show MetaAddress ", req)
+    // console.log("show MetaAddress ", req)
     if (req.metaAuth && req.metaAuth.recovered) {
         // Signature matches the cache address/challenge
         // Authentication is valid, assign JWT, etc.
