@@ -46,7 +46,7 @@ const USDC = new Token(chainId, tokens.usdc.address, tokens.usdc.decimals);
 const LCN = new Token(chainId, tokens.lcn.address, tokens.lcn.decimals);
 const MKR = new Token(chainId, tokens.mkr.address, tokens.mkr.decimals);
 const KNC = new Token(chainId, tokens.knc.address, tokens.knc.decimals);
-const OMG  = new Token(chainId, tokens.omg.address, tokens.omg.decimals);
+const OMG = new Token(chainId, tokens.omg.address, tokens.omg.decimals);
 
 
 const main = async () => {
@@ -58,10 +58,12 @@ const main = async () => {
     const MKRWETHPair = await Fetcher.fetchPairData(MKR, WETH[chainId]);
     const route = new Route([MKRWETHPair], WETH[chainId]);
     const amount = '0.005';
-    console.log("amount",amount)
+    console.log("amount", amount)
     const amountIn = web3.utils.toWei(amount, 'ether')
     const trade = new Trade(route, new TokenAmount(WETH[chainId], amountIn), TradeType.EXACT_INPUT)
-    console.log(`Trade ${amount} ETH to ` + trade.executionPrice.toSignificant(6) + ` MKR`);
+
+    const price = trade.executionPrice.toSignificant(6);
+    console.log(`Trade ${amount} ETH to ` + price * amount + ` MKR`);
     const slippageTolerance = new Percent('100') // 50 bips, or 0.50%
     const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw.toString()
     const path = [WETH[MKR.chainId].address, MKR.address]
@@ -75,7 +77,7 @@ const main = async () => {
         path,
         to,
         deadline,
-        { from: walletInfo.address, privateKey: walletInfo.privateKey, value },        
+        { from: walletInfo.address, privateKey: walletInfo.privateKey, value },
     )
 
     console.log('res', res);

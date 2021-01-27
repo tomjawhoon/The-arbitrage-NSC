@@ -15,8 +15,18 @@ const Uniswap = (web3) => {
         return sendTransaction(methodData, { from, privateKey, value });
     }
 
-    const swapTokensForExactTokens = (amountOut, amountInMax,  path, to, deadline, { from, privateKey, value }) => {
-        const methodData = contract.methods.swapTokensForExactTokens(amountOut, amountInMax,  path, to, deadline);
+    const swapTokensForExactTokens = (amountOut, amountInMax, path, to, deadline, { from, privateKey, value }) => {
+        const methodData = contract.methods.swapTokensForExactTokens(amountOut, amountInMax, path, to, deadline);
+        return sendTransaction(methodData, { from, privateKey, value });
+    }
+
+    const swapExactTokensForTokens = (amountIn, amountOutMin, path, to, deadline, { from, privateKey, value }) => {
+        const methodData = contract.methods.swapTokensForExactTokens(
+            amountIn,
+            amountOutMin,
+            path,
+            to,
+            deadline);
         return sendTransaction(methodData, { from, privateKey, value });
     }
 
@@ -37,7 +47,8 @@ const Uniswap = (web3) => {
         contract,
         methods: {
             swapExactETHForTokens,
-            swapTokensForExactTokens
+            swapTokensForExactTokens,
+            swapExactTokensForTokens
         },
         events: {
         }

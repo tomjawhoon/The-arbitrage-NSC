@@ -1,9 +1,9 @@
 const { ChainId, Token, WETH, Fetcher, Route, Trade, TokenAmount, TradeType } = require('@uniswap/sdk')
 const { getNetwork } = require('@ethersproject/networks')
 const web3 = require('web3');
-const { getDefaultProvider, InfuraProvider } = require('@ethersproject/providers');
+const { getDefaultProvider, InfuraProvider,getEthToTokenInputPrice } = require('@ethersproject/providers');
 const cons = require('consolidate');
-
+const uniswapPrice = require('uniswap-price')
 const getMidPrice = async (baseToken, baseDecimal, quoteToken, quoteDecimal, chainId, infuraKey) => {
     if (chainId == undefined) {
         chainId = ChainId.MAINNET
@@ -174,9 +174,9 @@ const main = async () => {
     // data = await getMidPrice("0xd26114cd6ee289accf82350c8d8487fedb8a0c07", 18, "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18)
     // console.log("SHOW", data)
     //WETH <== DAI
-    data = await getExecutionPrice("0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18, "0x6B175474E89094C44Da98b954EedeAC495271d0F", 18, web3.utils.toWei(amount, 'ETHER'))
+    data = await uniswapPrice.getExecutionPrice("0xd26114cd6ee289accf82350c8d8487fedb8a0c07", 18, "0x6B175474E89094C44Da98b954EedeAC495271d0F", 18, web3.utils.toWei(amount, 'ETHER'))
     console.log("1 DAI = 1 WETH-->", data)
-    console.log(`1 DAI = 1 WETH * ${amount}-->`, data * amount)
+    //console.log(`1 DAI = 1 WETH * ${amount}-->`, data * amount)
     //OMG <== DAI
     // data = await getMidPriceViaETH("0xd26114cd6ee289accf82350c8d8487fedb8a0c07", 18, "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18)
     // console.log("SHOW", data)

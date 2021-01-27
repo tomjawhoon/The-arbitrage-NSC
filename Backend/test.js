@@ -51,17 +51,19 @@ app.post('/totalcoin', (req, res) => {
         //const USDT = 0x8dd5fbce2f6a956c3022ba3663759011dd51e73e
         let data
         const amount = req.body.valueinput;
-        console.log("amount amount amount ", amount)
-        const test = amount;
-        console.log("show ==== amount ", test)
+        //console.log("amount amount amount ", amount)
+        const frontend_value = amount;
+        console.log("show <====  ", frontend_value)
         //WETH <== DAI
         // data = await getMidPrice("0xd26114cd6ee289accf82350c8d8487fedb8a0c07", 18, "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 18)
         // console.log("SHOW", data)
         //WETH <== DAI
-        data = await getExecutionPrice(req.body.fromtoken, 18,req.body.totoken, 18, web3.utils.toWei(test, 'ETHER'))
-        console.log("1 DAI = 1 WETH-->", data)
-        console.log(`1 DAI = 1 WETH * ${test}-->`, data * test)
-        const result = JSON.stringify(data * test);
+        data = await getExecutionPrice(req.body.fromtoken, 18, req.body.totoken, 18, web3.utils.toWei(frontend_value, 'ETHER'))
+        console.log("1 DAI = 1 WETH <===", data)
+        console.log(`1 DAI = 1 WETH * ${frontend_value}-->`, data * frontend_value)
+
+        const result = JSON.stringify(data * frontend_value);
+        console.log(`result-->`, result)
         res.send(result)
     }
     main()
