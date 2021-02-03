@@ -80,12 +80,19 @@ export async function getServerSideProps(context) {
         },
     }
 }
+const WETH = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
+const DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+const OMG = "0xd26114cd6ee289accf82350c8d8487fedb8a0c07";
+const MKR = "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2";
+const USDT = "0x8dd5fbce2f6a956c3022ba3663759011dd51e73e";
+const LCN = "0x0b3df94f9a997981c5ad52b0a16a26f6bb6039ed";
+const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
 export default function Test(props, initialId: Props): ReactElement {
     const [newId, setNewId] = useState(initialId)
     const [Price, setPrice] = useState(0)
     const [Hash, setHash] = useState(0)
     //  console.log("Price", Price)
-    function onSave(valueinput: any) {
+    const onSave = async (valueinput: any) => {
         console.log("valueinput", valueinput);
         axios.post('http://localhost:5001/testgetdata', {
             valueinput, //0.005 ค่าที่กรอกในช่องอ่านั้นแหละ

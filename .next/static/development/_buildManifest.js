@@ -1,1 +1,1 @@
-self.__BUILD_MANIFEST = {__rewrites:[],"/_error":["static\u002Fchunks\u002Fpages\u002F_error.js"],"/totalgetcoin":["static\u002Fchunks\u002Fpages\u002Ftotalgetcoin.js"],sortedPages:["\u002F_app","\u002F_error","\u002Ftotalgetcoin"]};self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()
+self.__BUILD_MANIFEST = {__rewrites:[],"/_error":["static\u002Fchunks\u002Fpages\u002F_error.js"],"/testsend":["static\u002Fchunks\u002Fpages\u002Ftestsend.js"],sortedPages:["\u002F_app","\u002F_error","\u002Ftestsend"]};self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()

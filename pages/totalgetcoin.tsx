@@ -25,15 +25,16 @@ export default function Totalgetcoin(props, initialId: Props): ReactElement {
     const MKR = "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2";
     const USDT = "0x8dd5fbce2f6a956c3022ba3663759011dd51e73e";
     const LCN = "0x0b3df94f9a997981c5ad52b0a16a26f6bb6039ed";
+    const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
     console.log("Price", Price)
     console.log("newId", newId)
     const timestamp = Date.now(); // This would be the timestamp you want to format
     const realtime = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(timestamp)
-    console.log("realtime",realtime)
+    //console.log("realtime", realtime)
     const onSave = async (valueinput: any) => {
         const response = await axios.post('http://localhost:5001/totalcoin', { //ETH
             valueinput, //0.005 ค่าที่กรอกในช่องอ่านั้นแหละ
-            fromtoken: WETH, //WETH -MKR
+            fromtoken: WETH, //WETH -USDC
             totoken: MKR,
         })
         //setPrice(response.data) //10
@@ -85,10 +86,7 @@ export default function Totalgetcoin(props, initialId: Props): ReactElement {
             <Button
                 variant="contained"
                 color="primary"
-                onClick={() => {
-
-                    onSave(newId)
-                }}
+                onClick={() => { onSave(newId) }}
             > Exchang Token
             </Button>
             <MaterialTable
@@ -100,7 +98,7 @@ export default function Totalgetcoin(props, initialId: Props): ReactElement {
                     { title: "Time", field: 'Time' },
                 ]}
                 data={sum.map((Show) =>
-                    ({ start: `${Show.newId}`, Price: Show.Price1, Price1: Show.Price2, Price2: Show.Price3,Time:realtime })
+                    ({ start: `${Show.newId}`, Price: Show.Price1, Price1: Show.Price2, Price2: Show.Price3, Time: realtime })
                 )
                 }
                 title="Demo" />

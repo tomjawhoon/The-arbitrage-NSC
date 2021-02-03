@@ -24,10 +24,10 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/_error.js"
     ],
-    "/totalgetcoin": [
+    "/testsend": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
-      "static/chunks/pages/totalgetcoin.js"
+      "static/chunks/pages/testsend.js"
     ]
   },
   "ampFirstPages": []
